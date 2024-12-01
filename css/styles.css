@@ -32,9 +32,9 @@ body {
 .hand {
     display: flex;
     justify-content: center;
-    gap: 10px; /* Adds space between cards */
+    gap: 10px; 
     min-height: 150px;
-    position: relative; /* Required for animations */
+    position: relative; 
 }
 
 .hand img {

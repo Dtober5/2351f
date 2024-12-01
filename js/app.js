@@ -1,11 +1,9 @@
-// Variables for the game
 var playerHand = [];
 var dealerHand = [];
 var deck = [];
 var playerScore = 0;
 var dealerScore = 0;
 
-// HTML Elements
 var playerHandDiv = document.getElementById("player-hand");
 var dealerHandDiv = document.getElementById("dealer-hand");
 var playerScoreSpan = document.getElementById("player-score");
@@ -13,28 +11,26 @@ var dealerScoreSpan = document.getElementById("dealer-score");
 var message = document.getElementById("message");
 var deckImage = document.getElementById("deck-image");
 
-// Function to create a new deck of cards
 function createDeck() {
-    var suits = ["hearts", "diamonds", "clubs", "spades"]; // Lowercase suits
+    var suits = ["hearts", "diamonds", "clubs", "spades"]; 
     var values = [
         "ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", 
         "jack", "queen", "king"
-    ]; // Lowercase values
-    deck = []; // Start with an empty deck
+    ]; 
+    deck = []; 
 
     for (var i = 0; i < suits.length; i++) {
         for (var j = 0; j < values.length; j++) {
             var card = {
                 suit: suits[i],
                 value: values[j],
-                image: "./" + values[j] + "_of_" + suits[i] + ".png" // Use lowercase paths
+                image: "./" + values[j] + "_of_" + suits[i] + ".png" 
             };
-            deck.push(card); // Add the card to the deck
+            deck.push(card);
         }
     }
 }
 
-// Function to shuffle the deck
 function shuffleDeck() {
     for (var i = deck.length - 1; i > 0; i--) {
         var randomIndex = Math.floor(Math.random() * (i + 1));
@@ -44,7 +40,6 @@ function shuffleDeck() {
     }
 }
 
-// Function to calculate the score of a hand
 function calculateScore(hand) {
     var score = 0;
     var aces = 0;
@@ -61,7 +56,7 @@ function calculateScore(hand) {
         }
     }
 
-    // Adjust the score for aces
+   
     while (score > 21 && aces > 0) {
         score -= 10;
         aces--;
@@ -70,30 +65,26 @@ function calculateScore(hand) {
     return score;
 }
 
-// Function to deal a card
 function dealCard(hand, handDiv) {
-    var card = deck.pop(); // Take the top card from the deck
-    hand.push(card); // Add the card to the player's or dealer's hand
+    var card = deck.pop(); 
+    hand.push(card); 
 
     var cardBack = document.createElement("img");
-    cardBack.src = "./back.png"; // Lowercase file path
+    cardBack.src = "./back.png"; 
     cardBack.alt = "Card Back";
 
     var cardFace = document.createElement("img");
-    cardFace.src = card.image; // Use card's lowercase image path
+    cardFace.src = card.image; 
     cardFace.alt = card.value + " of " + card.suit;
     cardFace.style.visibility = "hidden";
 
-    document.body.appendChild(cardBack); // Add the card to the body temporarily for animation
+    document.body.appendChild(cardBack);
 
-    // Get positions for animation
     var deckRect = deckImage.getBoundingClientRect();
     var handRect = handDiv.getBoundingClientRect();
 
-    // Offset each card so they appear side by side
     var offsetX = hand.length * 90;
 
-    // Animate the card moving to the hand
     gsap.fromTo(cardBack, {
         x: deckRect.left,
         y: deckRect.top
@@ -104,26 +95,24 @@ function dealCard(hand, handDiv) {
         onComplete: function () {
             cardBack.style.visibility = "hidden";
             cardFace.style.visibility = "visible";
-            handDiv.appendChild(cardFace); // Add the card to the hand area
+            handDiv.appendChild(cardFace); 
         }
     });
 }
 
-// Function to update the UI
 function updateUI() {
     playerScoreSpan.textContent = playerScore;
     dealerScoreSpan.textContent = dealerScore;
 }
 
-// Function to start the game
 function startGame() {
     createDeck();
     shuffleDeck();
 
     playerHand = [];
     dealerHand = [];
-    playerHandDiv.innerHTML = ""; // Clear player hand
-    dealerHandDiv.innerHTML = ""; // Clear dealer hand
+    playerHandDiv.innerHTML = ""; 
+    dealerHandDiv.innerHTML = ""; 
 
     dealCard(playerHand, playerHandDiv);
     dealCard(playerHand, playerHandDiv);
@@ -136,7 +125,6 @@ function startGame() {
     message.textContent = "Hit or Stand?";
 }
 
-// Event listeners for buttons
 document.getElementById("hit-btn").addEventListener("click", function () {
     dealCard(playerHand, playerHandDiv);
     playerScore = calculateScore(playerHand);
@@ -166,5 +154,4 @@ document.getElementById("stand-btn").addEventListener("click", function () {
 
 document.getElementById("reset-btn").addEventListener("click", startGame);
 
-// Start the game when the page loads
 startGame();
